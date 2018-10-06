@@ -13,8 +13,11 @@ Network Peer Time Synchronization for Node.js and Browser.
 About
 -----
 
-This is a small JavaScript library for Node.js and the Browser
-to synchronize the time between networking peers.
+This is a small JavaScript library for Node.js and the Browser to
+synchronize the time between networking peers by determining a
+globally-aligned local time. This is inevitable in a network of peers
+where exchanged data has to be locally timestamped with a globally
+agreed time.
 
 Algorithm
 ---------
