@@ -54,7 +54,6 @@ const whilst = (condition, callback) => {
 const mean = (arr) =>
     arr.reduce((a, b) => a + b) / arr.length
 
-
 /*  the variance (squared deviation from the mean)  */
 const variance = (arr) => {
     if (arr.length < 2)
