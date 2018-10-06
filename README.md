@@ -25,32 +25,34 @@ Algorithm
 PeerTime uses the following time synchronization protocol between a local node and
 a peer node:
 
-1. Local node stamps its current (potentially already globally aligned)
-   local time and sends it in an `TIME-REQ` (request) data frame to a peer node.
+1. REQUEST: Local node stamps its current (potentially already globally aligned)
+   local time and sends it in a `TIME-REQ` (request) data frame to a peer node.
 
-2. Upon receipt of the `TIME-REQ` frame, peer node stamps its current (potentially already globally aligned)
-   local time and sends it in an `TIME-RES` (response) data frame to the local node.
+2. RESPONSE: Upon receipt of the `TIME-REQ` frame, peer node stamps its
+   current (potentially already globally aligned) local time and sends it
+   in a `TIME-RES` (response) data frame to the local node.
 
-3. Upon receipt of the `TIME-RES` frame, local node subtracts its current local time
-   from the previously sent local time and divides it by two to compute network latency.
-   It subtracts current local time from peer time to determine communication time delta
-   and adds in the half-latency to get the correct local time offset.
+3. ADJUSTMENT: Upon receipt of the `TIME-RES` frame, local node
+   subtracts its current local time from the previously sent local time and
+   divides it by two to compute network latency. It subtracts current local
+   time from peer time to determine communication time delta and adds in
+   the half-latency to get the correct local time offset.
 
 The first determined clock offset is immediately be used to adjust the local time
 since it will get the local time into at least the right ballpark.
 
-The local node then repeats steps 1 through 3 a few times, pausing a few seconds each time.
-Other network communication is allowed in the interim, but should be minimized for best results.
+The local node then repeats the above steps 1 through 3 a few times,
+pausing a few seconds each time. Other network communication is allowed
+in the interim, but should be minimized for best results.
 
 The results of the determined local time offsets are accumulated and
-sorted in lowest-latency to highest-latency order. The median latency
-is determined by picking the mid-point sample from this ordered list.
-All samples above approximately one standard-deviation from the median
-are discarded and the remaining samples are averaged using an arithmetic
-mean.
-
-In case of multiple peers, the average local time offset against all
-peers are taken as the final local time offset.
+sorted in a lowest-latency to highest-latency order. The median latency
+is then determined by picking the mid-point sample from this ordered
+list. All samples above approximately one standard-deviation from the
+median are discarded and the remaining samples are averaged using an
+arithmetic mean. In case of multiple peers, the arithmetic average of
+the local time offset against all peers are taken as the final local
+time offset.
 
 Installation
 ------------
