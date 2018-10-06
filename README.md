@@ -65,9 +65,7 @@ Usage
 -----
 
 See the [TypeScript API definition](./src/peertime.d.ts) for all details
-on the Application Programming Interface (API) of PeerTime. See the
-[small Sample](./smp/sample.js) for some hints on the usage of of
-PeerTime.
+on the Application Programming Interface (API) of PeerTime.
 
 Credits
 -------
