@@ -16,6 +16,39 @@ About
 This is a small JavaScript library for Node.js and the Browser
 to synchronize the time between networking peers.
 
+Algorithm
+---------
+
+PeerTime uses the following time synchronization protocol between a local node and
+a peer node:
+
+1. Local node stamps its current (potentially already globally aligned)
+   local time and sends it in an `TIME-REQ` (request) data frame to a peer node.
+
+2. Upon receipt of the `TIME-REQ` frame, peer node stamps its current (potentially already globally aligned)
+   local time and sends it in an `TIME-RES` (response) data frame to the local node.
+
+3. Upon receipt of the `TIME-RES` frame, local node subtracts its current local time
+   from the previously sent local time and divides it by two to compute network latency.
+   It subtracts current local time from peer time to determine communication time delta
+   and adds in the half-latency to get the correct local time offset.
+
+The first determined clock offset is immediately be used to adjust the local time
+since it will get the local time into at least the right ballpark.
+
+The local node then repeats steps 1 through 3 a few times, pausing a few seconds each time.
+Other network communication is allowed in the interim, but should be minimized for best results.
+
+The results of the determined local time offsets are accumulated and
+sorted in lowest-latency to highest-latency order. The median latency
+is determined by picking the mid-point sample from this ordered list.
+All samples above approximately one standard-deviation from the median
+are discarded and the remaining samples are averaged using an arithmetic
+mean.
+
+In case of multiple peers, the average local time offset against all
+peers are taken as the final local time offset.
+
 Installation
 ------------
 
@@ -30,6 +63,21 @@ See the [TypeScript API definition](./src/peertime.d.ts) for all details
 on the Application Programming Interface (API) of PeerTime. See the
 [small Sample](./smp/sample.js) for some hints on the usage of of
 PeerTime.
+
+Credits
+-------
+
+PeerTime was inspired by a similar library named
+[timesync](https://github.com/enmasseio/timesync) and
+PeerTime's underlying core synchronization algorithm was
+derived from this library, which in turn derived it from the
+[NTP](https://en.wikipedia.org/wiki/Network_Time_Protocol) and
+[SNTP](http://www.mine-control.com/zack/timesync/timesync.html) time
+synchronization protocols. The major difference between PeerTime and
+[timesync](https://github.com/enmasseio/timesync) is that PeerTime
+is fully agnostic to the network layer, both from a JavaScript API
+perspective and NPM package dependency perspective and hence can be more
+easily embedded into other frameworks or larger libraries.
 
 License
 -------
