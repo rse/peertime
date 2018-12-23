@@ -52,6 +52,9 @@
         "eslint-plugin-import":            "2.14.0",
         "eslint-plugin-node":              "8.0.0"
     },
+    "engines": {
+        "node":                            ">=8.0.0"
+    },
     "scripts": {
         "prepublishOnly": "grunt default",
         "build":          "grunt default",
