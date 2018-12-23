@@ -1,6 +1,6 @@
 {
     "name":        "peertime",
-    "version":     "0.9.0",
+    "version":     "0.9.1",
     "description": "Network Peer Time Synchronization",
     "keywords":    [ "peer", "time", "synchronization", "offset", "networking" ],
     "browser":     "./lib/peertime.browser.js",
