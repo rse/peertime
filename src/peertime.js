@@ -27,7 +27,7 @@ import UUID         from "pure-uuid"
 import EventEmitter from "eventemitter3"
 
 /*
- *  ==== Ssynchronous Programming Utilities ====
+ *  ==== Synchronous Programming Utilities ====
  */
 
 /*  sleep for a certain time  */
