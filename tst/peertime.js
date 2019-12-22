@@ -32,7 +32,7 @@ Chai.use(ChaiDeepMatch)
 
 describe("PeerTime Library", () => {
     it("API structure", () => {
-        let peertime = new PeerTime({
+        const peertime = new PeerTime({
             send: (frame) => void frame
         })
         expect(peertime).to.respondTo("id")
@@ -46,8 +46,8 @@ describe("PeerTime Library", () => {
         /* eslint no-console: off */
         let channel = []
         let peer1now = 0
-        let peer1change = []
-        let peer1 = new PeerTime({
+        const peer1change = []
+        const peer1 = new PeerTime({
             id:     "peer1",
             peers:  [ "peer2" ],
             repeat: 0,
@@ -64,7 +64,7 @@ describe("PeerTime Library", () => {
             //  console.log("DEBUG: peer1: " + msg)
         })
         let peer2now = 0
-        let peer2change = []
+        const peer2change = []
         var peer2 = new PeerTime({
             id:     "peer2",
             peers:  [ "peer1" ],

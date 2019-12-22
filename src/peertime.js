@@ -58,7 +58,7 @@ const mean = (arr) =>
 const variance = (arr) => {
     if (arr.length < 2)
         return 0
-    let _mean = mean(arr)
+    const _mean = mean(arr)
     return arr
         .map((x) => Math.pow(x - _mean, 2))
         .reduce((a, b) => a + b) / (arr.length - 1)
@@ -72,7 +72,7 @@ const std = (arr) =>
 const median = (arr) => {
     if (arr.length < 2)
         return arr[0]
-    let sorted = arr.slice()
+    const sorted = arr.slice()
         .sort((a, b) => a > b ? 1 : (a < b ? -1 : 0))
     if (sorted.length % 2 === 0)
         return (sorted[arr.length / 2 - 1] + sorted[arr.length / 2]) / 2
@@ -147,7 +147,7 @@ module.exports = class PeerTime extends EventEmitter {
             this.emit("debug", `receive (request) frame: ${JSON.stringify(frame)}`)
 
             /*  reply with local time  */
-            let reply = {
+            const reply = {
                 fid:  this.fid++,
                 rid:  frame.fid,
                 from: this.id(),
@@ -171,7 +171,7 @@ module.exports = class PeerTime extends EventEmitter {
         const _rpc = (frame) => {
             return new Promise((resolve, reject) => {
                 /*  determine new unique frame id  */
-                let fid = this.fid++
+                const fid = this.fid++
 
                 /*  provide callback for deferred response handling  */
                 this.rpccb[fid] = (frame) => {
@@ -213,22 +213,22 @@ module.exports = class PeerTime extends EventEmitter {
         /*  determine time offset for a single peer via RPC  */
         const _getOffset = (peer) => {
             /*  determine start time  */
-            let start = this.options.now()
+            const start = this.options.now()
 
             /*  create and send request frame  */
-            let frame = {
+            const frame = {
                 from: this.id(),
                 to:   peer,
                 type: "TIME-REQ"
             }
             return _rpc(frame).then((frame) => {
                 /*  determine end time and roundtrip duration  */
-                let end = this.options.now()
-                let roundtrip = end - start
+                const end = this.options.now()
+                const roundtrip = end - start
 
                 /*  determine remote peer time and local peer offset  */
-                let timestamp = frame.data
-                let offset = Math.trunc(timestamp - end + roundtrip / 2)
+                const timestamp = frame.data
+                const offset = Math.trunc(timestamp - end + roundtrip / 2)
                 this.emit("debug", `determined offset ${this.offset} against peer ${peer}`)
 
                 /*  apply the first ever retrieved offset immediately  */
@@ -252,7 +252,7 @@ module.exports = class PeerTime extends EventEmitter {
         /*  perform a synchronization with a single peer  */
         const _syncWithPeer = (peer) => {
             /*  assemble all offsets  */
-            let all = []
+            const all = []
 
             /*  perform a single synchronization operation  */
             const sync = () =>
@@ -267,15 +267,15 @@ module.exports = class PeerTime extends EventEmitter {
                 })
                 .then(() => {
                     /*  filter out results marked as error  */
-                    let results = all.filter((result) => result !== null)
+                    const results = all.filter((result) => result !== null)
 
                     /*  calculate the limit for outliers  */
-                    let roundtrips = results.map((result) => result.roundtrip)
-                    let limit = median(roundtrips) + std(roundtrips)
+                    const roundtrips = results.map((result) => result.roundtrip)
+                    const limit = median(roundtrips) + std(roundtrips)
 
                     /*  filter all results which have a roundtrip smaller or equal than the limit  */
-                    let limited = results.filter((result) => result.roundtrip <= limit)
-                    let offsets = limited.map((result) => result.offset)
+                    const limited = results.filter((result) => result.roundtrip <= limit)
+                    const offsets = limited.map((result) => result.offset)
 
                     /*  return the mean from the limited offsets  */
                     return (offsets.length > 0 ? mean(offsets) : null)
@@ -286,11 +286,11 @@ module.exports = class PeerTime extends EventEmitter {
         return Promise.all(this.options.peers.map((peer) => _syncWithPeer(peer)))
             .then((all) => {
                 /*  filter out results marked as error or which are invalid numbers  */
-                let offsets = all.filter((offset) => (offset !== null && !isNaN(offset) && isFinite(offset)))
+                const offsets = all.filter((offset) => (offset !== null && !isNaN(offset) && isFinite(offset)))
 
                 /*  pick the mean of all peer offsets  */
                 if (offsets.length > 0) {
-                    let newOffset = Math.trunc(mean(offsets))
+                    const newOffset = Math.trunc(mean(offsets))
                     if (this.offset !== newOffset) {
                         this.offset = newOffset
                         this.emit("change", this.offset)
