@@ -27,7 +27,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean")
     grunt.loadNpmTasks("grunt-browserify")
     grunt.loadNpmTasks("grunt-eslint")
-    grunt.loadNpmTasks("grunt-tslint")
     grunt.loadNpmTasks("grunt-babel")
     grunt.loadNpmTasks("grunt-mocha-test")
     grunt.initConfig({
@@ -42,14 +41,6 @@ module.exports = function (grunt) {
                 options: {
                     envs: [ "node", "mocha" ]
                 }
-            }
-        },
-        tslint: {
-            "peertime-source": {
-                options: {
-                    configuration: "tslint.json"
-                },
-                src: "./src/peertime.d.ts"
             }
         },
         browserify: {
@@ -112,7 +103,7 @@ module.exports = function (grunt) {
             distclean: [ "node_modules" ]
         }
     })
-    grunt.registerTask("default", [ "eslint", "tslint", "browserify", "babel", "mochaTest" ])
+    grunt.registerTask("default", [ "eslint", "browserify", "babel", "mochaTest" ])
     grunt.registerTask("test", [ "mochaTest" ])
 }
 
