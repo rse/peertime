@@ -65,7 +65,7 @@ describe("PeerTime Library", () => {
         })
         let peer2now = 0
         const peer2change = []
-        var peer2 = new PeerTime({
+        const peer2 = new PeerTime({
             id:     "peer2",
             peers:  [ "peer1" ],
             repeat: 0,
